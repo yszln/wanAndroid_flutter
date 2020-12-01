@@ -40,6 +40,8 @@ class _MainPageState extends State<MainPage> {
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
+        ///固定显示文字
+        type: BottomNavigationBarType.fixed,
         onTap: (index) {
           _onNavTab(index);
         },
