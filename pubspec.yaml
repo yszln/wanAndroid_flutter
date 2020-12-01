@@ -23,6 +23,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #轮播
+  flutter_swiper: ^1.1.6
+  #网络访问
+  http: ^0.12.2
+
+
 
 
   # The following adds the Cupertino Icons font to your application.
