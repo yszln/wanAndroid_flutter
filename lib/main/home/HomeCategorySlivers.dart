@@ -4,41 +4,60 @@ import 'package:wan_android_flutter/main/model/BannerModel.dart';
 import 'package:wan_android_flutter/main/model/CategoryModel.dart';
 import 'package:wan_android_flutter/network/Api.dart';
 
-class HomeBannerSlivers extends StatefulWidget {
-  HomeBannerSlivers({Key key});
+class HomeCategorySlivers extends StatefulWidget {
+  HomeCategorySlivers({Key key});
 
   @override
   State<StatefulWidget> createState() {
-    return _HomeBannersState();
+    return _HomeCategoryState();
   }
 }
 
-class _HomeBannersState extends State<HomeBannerSlivers> {
-  List<BannerItem> banners = [];
+class _HomeCategoryState extends State<HomeCategorySlivers> {
   List<CategoryItem> categorys = [];
 
   @override
   void initState() {
     super.initState();
-    _getBanner();
     _getCategory();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
+  /*  return SliverAppBar(
       expandedHeight: 160,
-      flexibleSpace: _banner(),
+      flexibleSpace: _cates(),
+    );*/
+    return  SliverGrid(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 100.0,
+        mainAxisSpacing: 10.0,
+        crossAxisSpacing: 10.0,
+        childAspectRatio: 1.3,//子控件宽高比
+      ),
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          return Padding(
+            padding: EdgeInsets.only(left: 5, right: 5),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.ac_unit_rounded,
+                  color: Colors.grey[250],
+                ),
+                Text(
+                  categorys[index].name,
+                  style: TextStyle(fontSize: 11, color: Colors.grey[250]),
+                )
+              ],
+            ),
+          );
+        },
+        childCount: categorys.length,
+      ),
     );
   }
 
-  void _getBanner() {
-    Api.getHomeBanner().then((value) {
-      setState(() {
-        banners = value.data;
-      });
-    });
-  }
 
   void _getCategory() {
     Api.getHomeCategory().then((value) {
@@ -48,23 +67,6 @@ class _HomeBannersState extends State<HomeBannerSlivers> {
     });
   }
 
-  _banner() {
-    return Container(
-      height: 200,
-      margin: EdgeInsets.only(top: 6),
-      child: Swiper(
-        itemBuilder: (BuildContext context, int index) {
-          return new Image.network(
-            banners[index].imagePath,
-            fit: BoxFit.fill,
-          );
-        },
-        itemCount: banners.length,
-        pagination: new SwiperPagination(),
-        // control: new SwiperControl(),
-      ),
-    );
-  }
 
   _cates() {
     List<List<CategoryItem>> _list = [];
@@ -121,5 +123,6 @@ class _HomeBannersState extends State<HomeBannerSlivers> {
           ),
       children: items,
     );
+
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wan_android_flutter/search/SearchPage.dart';
 
 class HomeHeadSlivers extends StatefulWidget {
   @override
@@ -50,20 +51,21 @@ class HomeHeadState extends State<HomeHeadSlivers> {
 
       ],
       ///标题
-      title: Text('玩安卓'),
+      title: Text('玩安卓',style: TextStyle(fontSize: 14),),
 
 
       ///搜索
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         title: Container(
-          height: 30,
-          width: MediaQuery.of(context).size.width * 0.6,
+          height: 32,
+          width: MediaQuery.of(context).size.width * 0.7-35,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
           child: TextField(
+            onTap: (){_toSearch();},
             style: TextStyle(fontFamily: "PingFang"),
             decoration: InputDecoration(
               hintText: '请输入商品名称',
@@ -89,5 +91,11 @@ class HomeHeadState extends State<HomeHeadSlivers> {
 
 
     );
+  }
+
+  void _toSearch() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SearchPage();
+    }));
   }
 }
