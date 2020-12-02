@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: Container(
         ///设置状态栏边距
-        padding:EdgeInsets.only(top: MediaQueryData.fromWindow(window).padding.top),
+        // padding:EdgeInsets.only(top: MediaQueryData.fromWindow(window).padding.top),
         ///可滑动切换的页面
         child: PageView(
           children: _navigatorPages(),
