@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }),
                     semanticIndexCallback: (Widget widget, int localIndex) {
+                      print("indexCallback:${localIndex}");
                       if (localIndex == articles.length) {
                         page++;
                         _getArticle();
