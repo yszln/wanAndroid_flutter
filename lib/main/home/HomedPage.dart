@@ -3,9 +3,9 @@ import 'package:wan_android_flutter/common/WebViewPage.dart';
 import 'package:wan_android_flutter/main/home/HomeBannerSlivers.dart';
 import 'package:wan_android_flutter/main/home/HomeCategorySlivers.dart';
 import 'package:wan_android_flutter/main/home/HomeHeadSlivers.dart';
+import 'package:wan_android_flutter/main/home/TabArticleSlivers.dart';
 import 'package:wan_android_flutter/main/model/CommonArticle.dart';
 import 'package:wan_android_flutter/network/Api.dart';
-import 'package:wan_android_flutter/search/SearchPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int page = 0;
+  int articleType=0;
 
   List<CommonArticle> articles = [];
 
@@ -27,7 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> _tabs = ['Tab 1', 'Tab 2'];
     return NotificationListener(
         child: RefreshIndicator(
           child: CustomScrollView(
@@ -35,6 +35,12 @@ class _HomePageState extends State<HomePage> {
               HomeHeadSlivers(),
               HomeBannerSlivers(),
               HomeCategorySlivers(),
+             TabArticleSlivers(onTap: (index){
+               articleType=index;
+               setState(() {
+                 _refreshData();
+               });
+             },),
               _articleList(),
             ],
           ),
@@ -54,11 +60,26 @@ class _HomePageState extends State<HomePage> {
 
 
   void _getArticle() {
-    Api.getHomeArticle(page).then((value) {
-      setState(() {
-        articles.addAll(value.data.datas);
-      });
-    });
+    switch(articleType){
+      case 0:
+        //首页
+        Api.getHomeArticle(page).then((value) {
+          setState(() {
+            articles.addAll(value.data.datas);
+          });
+        });
+        break;
+
+      case 1:
+        //广场
+        Api.getUserList(page).then((value) {
+          setState(() {
+            articles.addAll(value.data.datas);
+          });
+        });
+        break;
+    }
+
   }
 
   _articleItem(int index) {

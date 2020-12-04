@@ -50,7 +50,7 @@ class _HomeBannersState extends State<HomeBannerSlivers> {
 
   _banner() {
     return Container(
-      height: 200,
+      height: 220,
       margin: EdgeInsets.only(top: 6),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
@@ -59,8 +59,22 @@ class _HomeBannersState extends State<HomeBannerSlivers> {
             fit: BoxFit.fill,
           );
         },
+        autoplay: true,
+        loop: false,
         itemCount: banners.length,
-        pagination: new SwiperPagination(),
+        pagination: SwiperPagination(
+          // 分页指示器
+          alignment: Alignment.bottomCenter, // 位置 Alignment.bottomCenter 底部中间
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 5), // 距离调整
+          builder: DotSwiperPaginationBuilder(
+            // 指示器构建
+            space: 5, // 点之间的间隔
+            size: 6, // 没选中时的大小
+            activeSize: 8, // 选中时的大小
+            color: Colors.black54, // 没选中时的颜色
+            activeColor: Colors.white, // 选中时的颜色
+          ),
+        ),
         // control: new SwiperControl(),
       ),
     );

@@ -63,6 +63,17 @@ class HttpUtils {
     }
     return response;
   }
+  Future<Response> post(url, {data, options, cancelToken}) async {
+    Response response;
+    try {
+      response = await _dio.post(url,
+          queryParameters: data, options: options, cancelToken: cancelToken);
+    } on DioError catch (e) {
+      formatError(e);
+    }
+    return response;
+  }
+
 
   /*
    * error统一处理

@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/main/found/FoundPage.dart';
@@ -12,13 +11,16 @@ int _currentIndex = 0;
 var mPageViewController = PageController();
 
 class MainPage extends StatefulWidget {
+
+  List<Widget> pages = [HomePage(),KnowledgePage(),FoundPage(),MinePage()];
+
   @override
   State<StatefulWidget> createState() {
     return _MainPageState();
   }
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage>  with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +28,7 @@ class _MainPageState extends State<MainPage> {
         ///设置状态栏边距
         // padding:EdgeInsets.only(top: MediaQueryData.fromWindow(window).padding.top),
         ///可滑动切换的页面
-        child: PageView(
-          children: _navigatorPages(),
-          controller: mPageViewController,
-          onPageChanged: (index) {
-            _onPageChange(index);
-          },
-        ),
+        child:widget.pages[_currentIndex],
       ),
       ///底部菜单
       bottomNavigationBar: BottomNavigationBar(
@@ -53,7 +49,7 @@ class _MainPageState extends State<MainPage> {
   void _onNavTab(int index) {
     setState(() {
       _currentIndex = index;
-      mPageViewController.jumpToPage(index);
+      // mPageViewController.jumpToPage(index);
     });
   }
 
@@ -88,12 +84,7 @@ class _MainPageState extends State<MainPage> {
 
   ///可切换的页面
   _navigatorPages() {
-    List<Widget> pages = [];
-    pages.add(HomePage());
-    pages.add(KnowledgePage());
-    pages.add(FoundPage());
-    pages.add(MinePage());
-    return pages;
+
   }
 
   @override
@@ -102,5 +93,8 @@ class _MainPageState extends State<MainPage> {
     ///销毁控制器
     mPageViewController.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
 }
