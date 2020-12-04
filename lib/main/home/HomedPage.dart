@@ -35,60 +35,23 @@ class _HomePageState extends State<HomePage> {
               HomeHeadSlivers(),
               HomeBannerSlivers(),
               HomeCategorySlivers(),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  //返回组件集合
-                    List.generate(articles.length, (int index) {
-                      //返回 组件
-                      return GestureDetector(
-                        onTap: () {
-                          print("点击$index");
-                        },
-                        child: Card(
-                          child: _articleItem(index),
-                        ),
-                      );
-                    }),
-                    semanticIndexCallback: (Widget widget, int localIndex) {
-                      print("indexCallback:${localIndex}");
-                      if (localIndex == articles.length) {
-                        page++;
-                        _getArticle();
-                      }
-                    }
-                ),
-              ),
+              _articleList(),
             ],
           ),
-          onRefresh: () {
-            _refreshData();
-          },
+          onRefresh:_refreshData,
 
         ));
   }
 
 
-  void _refreshData() {
+  Future<void> _refreshData() async {
     articles.clear();
     _getArticle();
   }
 
-  _onScrollNotification(ScrollNotification scrollInfo) {
-    if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-      //滑到了底部
-      page++;
-      _getArticle();
-    }
-  }
 
-  _article() {
-    return ListView.builder(
-        itemCount: articles.length,
-        itemExtent: 50,
-        itemBuilder: (BuildContext context, int index) {
-          return _articleItem(index);
-        });
-  }
+
+
 
   void _getArticle() {
     Api.getHomeArticle(page).then((value) {
@@ -108,6 +71,32 @@ class _HomePageState extends State<HomePage> {
         WebViewPage.toWeb(
             context, articles[index].link, articles[index].title);
       },
+    );
+  }
+
+  _articleList() {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        //返回组件集合
+          List.generate(articles.length, (int index) {
+            //返回 组件
+            return GestureDetector(
+              onTap: () {
+                print("点击$index");
+              },
+              child: Card(
+                child: _articleItem(index),
+              ),
+            );
+          }),
+          semanticIndexCallback: (Widget widget, int localIndex) {
+            print("indexCallback:${localIndex}");
+            if (localIndex == (articles.length-1)) {
+              page++;
+              _getArticle();
+            }
+          }
+      ),
     );
   }
 }

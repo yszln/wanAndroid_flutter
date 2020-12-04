@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 
 //https://blog.csdn.net/yechaoa/article/details/90234708
 class HttpUtils {
-
   static final baseUrl = 'https://www.wanandroid.com/';
 
   static HttpUtils _instence;
@@ -14,26 +13,41 @@ class HttpUtils {
     return _instence;
   }
 
-
   Dio _dio;
   BaseOptions _options;
 
-  HttpUtils(){
-    _options=BaseOptions(
+  HttpUtils() {
+    _options = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: 10000,
       receiveTimeout: 5000,
       sendTimeout: 30000,
       //请求头
-      headers: {
-
-      },
+      headers: {},
       //请求的Content-Type，默认值是"application/json; charset=utf-8",Headers.formUrlEncodedContentType会自动编码请求体.
       contentType: Headers.formUrlEncodedContentType,
       //表示期望以那种格式(方式)接受响应数据。接受4种类型 `json`, `stream`, `plain`, `bytes`. 默认值是 `json`,
       responseType: ResponseType.json,
     );
-    _dio=Dio(_options);
+    _dio = Dio(_options);
+    //日志拦截器
+    _dio.interceptors.add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+      print('=============================request============================');
+      print('url:${options.uri}');
+      print('method ${options.method}');
+      print('headers:${options.headers}');
+      print('data:\n${options.data}');
+      print('queryParameters:\n${options.queryParameters}');
+      return options;
+    }, onResponse: (Response response) {
+      print('=============================response============================');
+      print('url:${response.request.uri}');
+      print('response:${response.data}');
+      return response;
+    }, onError: (DioError e) {
+      print('Error url:${e.request.uri}');
+      return e;
+    }));
   }
 
   /*
@@ -42,15 +56,12 @@ class HttpUtils {
   Future<Response> get(url, {data, options, cancelToken}) async {
     Response response;
     try {
-      response = await _dio.get(url, queryParameters: data, options: options, cancelToken: cancelToken);
-      print('get success---------${response.statusCode}');
-      print('get success---------${response.data}');
-
+      response = await _dio.get(url,
+          queryParameters: data, options: options, cancelToken: cancelToken);
     } on DioError catch (e) {
-      print('get error---------$e');
       formatError(e);
     }
-    return response.data;
+    return response;
   }
 
   /*
@@ -78,3 +89,4 @@ class HttpUtils {
     }
   }
 }
+
