@@ -31,12 +31,12 @@ class _TabArticleState extends State<TabArticleSlivers>
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      flexibleSpace: Expanded(child: TabBar(
+      flexibleSpace: TabBar(
 
         controller: _tabController,
         tabs: tabs.map((e) => Tab(text: e)).toList(),
         onTap:widget.onTap,
-      ),),
+      ),
     );
   }
 
