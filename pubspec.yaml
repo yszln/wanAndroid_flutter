@@ -28,6 +28,9 @@ dependencies:
   #网络访问
   #http: ^0.12.2
   dio: ^3.0.10
+  #cookie
+  dio_cookie_manager: ^1.0.0
+  cookie_jar: ^1.0.0
   #webView
   webview_flutter: ^1.0.7
   #toast

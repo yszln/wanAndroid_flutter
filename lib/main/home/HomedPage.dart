@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int page = 0;
-  int articleType=0;
+  int articleType = 0;
 
   List<CommonArticle> articles = [];
 
@@ -30,37 +30,33 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return NotificationListener(
         child: RefreshIndicator(
-          child: CustomScrollView(
-            slivers: [
-              HomeHeadSlivers(),
-              HomeBannerSlivers(),
-              HomeCategorySlivers(),
-             TabArticleSlivers(onTap: (index){
-               articleType=index;
-               setState(() {
-                 _refreshData();
-               });
-             },),
-              _articleList(),
-            ],
+      child: CustomScrollView(
+        slivers: [
+          HomeHeadSlivers(),
+          HomeBannerSlivers(),
+          HomeCategorySlivers(),
+          TabArticleSlivers(
+            onTap: (index) {
+              articleType = index;
+              setState(() {
+                _refreshData();
+              });
+            },
           ),
-          onRefresh:_refreshData,
-
-        ));
+          _articleList(),
+        ],
+      ),
+      onRefresh: _refreshData,
+    ));
   }
-
 
   Future<void> _refreshData() async {
     articles.clear();
     _getArticle();
   }
 
-
-
-
-
   void _getArticle() {
-    switch(articleType){
+    switch (articleType) {
       case 0:
         //首页
         Api.getHomeArticle(page).then((value) {
@@ -79,18 +75,17 @@ class _HomePageState extends State<HomePage> {
         });
         break;
     }
-
   }
 
   _articleItem(int index) {
     return GestureDetector(
       child: Padding(
-        padding: EdgeInsets.all(10), child: Text(articles[index].title == null
-          ? "为空"
-          : articles[index].title),),
+        padding: EdgeInsets.all(10),
+        child:
+            Text(articles[index].title == null ? "为空" : articles[index].title),
+      ),
       onTap: () {
-        WebViewPage.toWeb(
-            context, articles[index].link, articles[index].title);
+        WebViewPage.toWeb(context, articles[index].link, articles[index].title);
       },
     );
   }
@@ -98,7 +93,7 @@ class _HomePageState extends State<HomePage> {
   _articleList() {
     return SliverList(
       delegate: SliverChildListDelegate(
-        //返回组件集合
+          //返回组件集合
           List.generate(articles.length, (int index) {
             //返回 组件
             return GestureDetector(
@@ -109,15 +104,13 @@ class _HomePageState extends State<HomePage> {
                 child: _articleItem(index),
               ),
             );
-          }),
-          semanticIndexCallback: (Widget widget, int localIndex) {
-            print("indexCallback:${localIndex}");
-            if (localIndex == (articles.length-1)) {
-              page++;
-              _getArticle();
-            }
-          }
-      ),
+          }), semanticIndexCallback: (Widget widget, int localIndex) {
+        print("indexCallback:${localIndex}");
+        if (localIndex == (articles.length - 1)) {
+          page++;
+          _getArticle();
+        }
+      }),
     );
   }
 }

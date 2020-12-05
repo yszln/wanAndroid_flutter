@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 
 //https://blog.csdn.net/yechaoa/article/details/90234708
 class HttpUtils {
@@ -30,6 +32,8 @@ class HttpUtils {
       responseType: ResponseType.json,
     );
     _dio = Dio(_options);
+    //cookie管理
+    _dio.interceptors.add(CookieManager(CookieJar()));
     //日志拦截器
     _dio.interceptors.add(InterceptorsWrapper(onRequest: (RequestOptions options) {
       print('=============================request============================');
